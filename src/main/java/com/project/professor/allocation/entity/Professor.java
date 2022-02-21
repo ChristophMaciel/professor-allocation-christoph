@@ -13,6 +13,7 @@ public class Professor {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(nullable = false)
 	private Long id;
 	private String name;
 	@Column(length = 14, unique = true, nullable = false)
