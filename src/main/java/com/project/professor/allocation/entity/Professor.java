@@ -7,15 +7,18 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Professor {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(nullable = false)
 	private Long id;
+
+	@Column(nullable = false)
 	private String name;
+
 	@Column(length = 14, unique = true, nullable = false)
 	private String cpf;
 
@@ -25,6 +28,8 @@ public class Professor {
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "department_id", updatable = false, insertable = false, nullable = false)
 	private Department depart;
+
+	@OneToMany(mappedBy = "professor")
 
 	public Long getId() {
 		return id;
