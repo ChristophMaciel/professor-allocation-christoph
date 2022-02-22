@@ -7,7 +7,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 @Entity
 public class Professor {
@@ -28,8 +27,6 @@ public class Professor {
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "department_id", updatable = false, insertable = false, nullable = false)
 	private Department depart;
-
-	@OneToMany(mappedBy = "professor")
 
 	public Long getId() {
 		return id;
