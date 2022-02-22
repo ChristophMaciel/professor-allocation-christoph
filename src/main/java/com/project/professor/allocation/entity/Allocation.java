@@ -95,4 +95,11 @@ public class Allocation {
 		this.professorId = professorId;
 	}
 
+	@Override
+	public String toString() {
+		return "Allocation [id=" + id + ", day=" + day + ", start=" + start + ", end=" + end + ", professorId="
+				+ professorId + ", courseId=" + courseId + ", professor=" + professor + ", course=" + course + "]";
+	}
+
+	
 }

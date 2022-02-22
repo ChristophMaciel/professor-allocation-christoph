@@ -13,6 +13,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.util.List;
+import java.util.Optional;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
@@ -20,92 +21,102 @@ import java.util.List;
 @TestPropertySource(locations = "classpath:application.properties")
 public class AllocationRepositoryTest {
 
-    SimpleDateFormat sdf = new SimpleDateFormat("HH:mmZ");
+	SimpleDateFormat sdf = new SimpleDateFormat("HH:mmZ");
 
-    @Autowired
-    AllocationRepository allocationRepository;
+	@Autowired
+	AllocationRepository allocationRepository;
 
-    @Test
-    public void findAll() {
-        // Act
-        
+	@Test
+	public void findAll() {
+		// Act
+		List<Allocation> allocations = allocationRepository.findAll();
 
-        // Print
-        
-    }
+		// Print
+		System.out.println(allocations);
+	}
 
-    @Test
-    public void findById() {
-        // Arrange
-        
+	@Test
+	public void findById() {
+		// Arrange
 
-        // Act
-        
+		// Act
+		Optional<Allocation> optional = allocationRepository.findById(20L);
 
-        // Print
-        
-    }
+		// Print
+		Allocation alloc = optional.orElse(null);
+		System.out.println(alloc);
 
-    @Test
-    public void findByProfessorId() {
-        // Arrange
-        
+	}
 
-        // Act
-        
+	@Test
+	public void findByProfessorId() {
+		// Arrange
 
-        // Print
-        
-    }
+		// Act
 
-    @Test
-    public void findByCourseId() {
-        // Arrange
-        
+		// Print
 
-        // Act
-        
+	}
 
-        // Print
-        
-    }
+	@Test
+	public void findByCourseId() {
+		// Arrange
 
-    @Test
-    public void save_create() throws ParseException {
-        // Arrange
-        
+		// Act
 
-        // Act
-        
+		// Print
 
-        // Print
-        
-    }
+	}
 
-    @Test
-    public void save_update() throws ParseException {
-        // Arrange
-        
+	@Test
+	public void save_create() throws ParseException {
+		// Arrange
+		Allocation allocation = new Allocation();
+		allocation.setDay(DayOfWeek.MONDAY);
+		allocation.setCourseId(1L);
+		allocation.setProfessorId(1L);
+		allocation.setStart(sdf.parse("10:00-0300"));
+		allocation.setEnd(sdf.parse("13:00-0300"));
 
-        // Act
-        
+		// Act
+		Allocation alloc = allocationRepository.save(allocation);
 
-        // Print
-        
-    }
+		// Print
+		System.out.println(alloc);
 
-    @Test
-    public void deleteById() {
-        // Arrange
-        
+	}
 
-        // Act
-        
-    }
+	@Test
+	public void save_update() throws ParseException {
+		// Arrange
+		Allocation allocation = new Allocation();
+		allocation.setId(1L);
+		allocation.setDay(DayOfWeek.WEDNESDAY);
+		allocation.setCourseId(1L);
+		allocation.setProfessorId(1L);
+		allocation.setStart(sdf.parse("12:00-0300"));
+		allocation.setEnd(sdf.parse("13:00-0300"));
 
-    @Test
-    public void deleteAll() {
-        // Act
-        
-    }
+		// Act
+		Allocation alloc = allocationRepository.save(allocation);
+
+		// Print
+		System.out.println(alloc);
+
+	}
+
+	@Test
+	public void deleteById() {
+		// Arrange
+
+		// Act
+		allocationRepository.deleteById(2L);
+
+	}
+
+	@Test
+	public void deleteAll() {
+		// Act
+
+	}
 }
