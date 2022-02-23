@@ -1,6 +1,8 @@
 package com.project.professor.allocation.repository;
 
 import java.text.ParseException;
+import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.TestPropertySource;
+import com.project.professor.allocation.entity.Course;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
@@ -22,8 +25,10 @@ public class CourseRepositoryTest {
 	@Test
 	public void findAll() {
 		// Act
+		List<Course> course = courseRepository.findAll();
 
 		// Print
+		System.out.println(course);
 
 	}
 
@@ -32,8 +37,11 @@ public class CourseRepositoryTest {
 		// Arrange
 
 		// Act
+		Optional<Course> optional = courseRepository.findById(2L);
 
 		// Print
+		Course course = optional.orElse(null);
+		System.out.println(course);
 
 	}
 
@@ -60,20 +68,29 @@ public class CourseRepositoryTest {
 	@Test
 	public void save_create() throws ParseException {
 		// Arrange
+		Course course = new Course();
+		course.setName("Backend");
 
 		// Act
+		Course courses = courseRepository.save(course);
 
 		// Print
+		System.out.println(courses);
 
 	}
 
 	@Test
 	public void save_update() throws ParseException {
 		// Arrange
+		Course course = new Course();
+		course.setId(2L);
+		course.setName("Backend");
 
 		// Act
+		Course courses = courseRepository.save(course);
 
 		// Print
+		System.out.println(courses);
 
 	}
 
