@@ -65,7 +65,7 @@ public class AllocationService {
 	}
 
 	// CRUD: Delete All
-	public void deleteAll(Long id) {
+	public void deleteAll() {
 
 		allocationRepository.deleteAllInBatch();
 
