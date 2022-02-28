@@ -51,9 +51,19 @@ public class AllocationService {
 	}
 
 	private Allocation saveInternal(Allocation allocation) {
+<<<<<<< HEAD
+		if (hasCollision(allocation)) {
+			throw new RuntimeException();
+		} else {
+
+			Allocation allocationNew = allocationRepository.save(allocation);
+			return allocationNew;
+		}
+=======
 
 		Allocation allocationNew = allocationRepository.save(allocation);
 		return allocationNew;
+>>>>>>> main
 	}
 
 	// CRUD: Delete By Id
