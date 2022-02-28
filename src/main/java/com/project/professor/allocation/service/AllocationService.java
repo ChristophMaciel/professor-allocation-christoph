@@ -6,16 +6,25 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.project.professor.allocation.entity.Allocation;
+import com.project.professor.allocation.entity.Course;
+import com.project.professor.allocation.entity.Professor;
 import com.project.professor.allocation.repository.AllocationRepository;
+import com.project.professor.allocation.repository.CourseRepository;
+import com.project.professor.allocation.repository.ProfessorRepository;
 
 @Service
 public class AllocationService {
 
 	private final AllocationRepository allocationRepository;
+	private final ProfessorRepository professorRepository;
+	private final CourseRepository courseRepository;
 
-	public AllocationService(AllocationRepository allocationRepository) {
+	public AllocationService(AllocationRepository allocationRepository, ProfessorRepository professorRepository,
+			CourseRepository courseRepository) {
 		super();
 		this.allocationRepository = allocationRepository;
+		this.professorRepository = professorRepository;
+		this.courseRepository = courseRepository;
 	}
 
 	// CRUD: Read All
@@ -26,7 +35,6 @@ public class AllocationService {
 
 	// CRUD: Read by ID
 	public Allocation findById(Long id) {
-
 		Optional<Allocation> optional = allocationRepository.findById(id);
 		Allocation allocation = optional.orElse(null);
 		return allocation;
@@ -34,14 +42,12 @@ public class AllocationService {
 
 	// CRUD: Create
 	public Allocation create(Allocation allocation) {
-
 		allocation.setId(null);
 		return saveInternal(allocation);
 	}
 
 	// CRUD: Update
 	public Allocation update(Allocation allocation) {
-
 		Long id = allocation.getId();
 		if (id != null && allocationRepository.existsById(id)) {
 			return saveInternal(allocation);
@@ -51,24 +57,24 @@ public class AllocationService {
 	}
 
 	private Allocation saveInternal(Allocation allocation) {
-<<<<<<< HEAD
 		if (hasCollision(allocation)) {
-			throw new RuntimeException();
+			throw new RuntimeException("hasCollision");
 		} else {
-
 			Allocation allocationNew = allocationRepository.save(allocation);
+
+			Professor professor = professorRepository.findById(allocationNew.getProfessorId()).orElse(null);
+			Course course = courseRepository.findById(allocationNew.getCourseId()).orElse(null);
+
+			allocationNew.setProfessor(professor);
+			allocationNew.setCourse(course);
+
 			return allocationNew;
 		}
-=======
 
-		Allocation allocationNew = allocationRepository.save(allocation);
-		return allocationNew;
->>>>>>> main
 	}
 
 	// CRUD: Delete By Id
 	public void deleteById(Long id) {
-
 		if (allocationRepository.existsById(id)) {
 			allocationRepository.deleteById(id);
 

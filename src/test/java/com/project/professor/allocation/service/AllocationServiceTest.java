@@ -47,7 +47,7 @@ public class AllocationServiceTest {
 		// Arrange
 		Allocation allocation = new Allocation();
 		allocation.setId(null);
-		allocation.setDay(DayOfWeek.WEDNESDAY);
+		allocation.setDay(DayOfWeek.FRIDAY);
 		allocation.setStart(sdf.parse("19:00-0300"));
 		allocation.setEnd(sdf.parse("20:00-0300"));
 		allocation.setProfessorId(1L);
