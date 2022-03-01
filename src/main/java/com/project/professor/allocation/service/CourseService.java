@@ -9,15 +9,16 @@ import com.project.professor.allocation.entity.Allocation;
 import com.project.professor.allocation.entity.Course;
 import com.project.professor.allocation.entity.Professor;
 import com.project.professor.allocation.repository.AllocationRepository;
+import com.project.professor.allocation.repository.CourseRepository;
 
 @Service
 public class CourseService {
 
-	private final CourseService courseService;
+	private final CourseRepository courseRepository;
 
-	public CourseService(CourseService courseService) {
+	public CourseService(CourseRepository courseRepository) {
 		super();
-		this.courseService = courseService;
+		this.courseRepository = courseRepository;
 	}
 
 	// CRUD: Read All
@@ -33,36 +34,19 @@ public class CourseService {
 		return course;
 	}
 
-	public List<Course> findByCourse(Long courseId) {
-		return courseRepository.findByCourseId(courseId);
-	}
-
 	// CRUD: Create
 	public Course create(Course course) {
 		course.setId(null);
-		return saveInternal(course);
+		return course;
 	}
 
 	// CRUD: Update
 	public Course update(Course course) {
 		Long id = course.getId();
 		if (id != null && courseRepository.existsById(id)) {
-			return saveInternal(course);
+			return course;
 		} else {
 			return null;
-		}
-	}
-
-	private Course saveInternal(Course course) {
-		if (!isEndHourGreaterThanStartHour(course) || hasCollision(course)) {
-			throw new RuntimeException();
-		} else {
-			course = courseRepository.save(course);
-
-			Course course = courseService.findById(course.getCourseId());
-			course.setCourse(course);
-
-			return course;
 		}
 	}
 
