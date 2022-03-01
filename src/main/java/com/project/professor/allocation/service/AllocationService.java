@@ -16,15 +16,15 @@ import com.project.professor.allocation.repository.ProfessorRepository;
 public class AllocationService {
 
 	private final AllocationRepository allocationRepository;
-	private final ProfessorRepository professorRepository;
-	private final CourseRepository courseRepository;
+	private final ProfessorService professorService;
+	private final CourseService courseService;
 
-	public AllocationService(AllocationRepository allocationRepository, ProfessorRepository professorRepository,
-			CourseRepository courseRepository) {
+	public AllocationService(AllocationRepository allocationRepository, ProfessorService professorService,
+			CourseService courseService) {
 		super();
 		this.allocationRepository = allocationRepository;
-		this.professorRepository = professorRepository;
-		this.courseRepository = courseRepository;
+		this.professorService = professorService;
+		this.courseService = courseService;
 	}
 
 	// CRUD: Read All
@@ -38,6 +38,14 @@ public class AllocationService {
 		Optional<Allocation> optional = allocationRepository.findById(id);
 		Allocation allocation = optional.orElse(null);
 		return allocation;
+	}
+
+	public List<Allocation> findByProfessor(Long professorId) {
+		return allocationRepository.findByProfessorId(professorId);
+	}
+
+	public List<Allocation> findByCourse(Long courseId) {
+		return allocationRepository.findByCourseId(courseId);
 	}
 
 	// CRUD: Create
@@ -57,20 +65,19 @@ public class AllocationService {
 	}
 
 	private Allocation saveInternal(Allocation allocation) {
-		if (hasCollision(allocation)) {
-			throw new RuntimeException("hasCollision");
+		if (!isEndHourGreaterThanStartHour(allocation) || hasCollision(allocation)) {
+			throw new RuntimeException();
 		} else {
-			Allocation allocationNew = allocationRepository.save(allocation);
+			allocation = allocationRepository.save(allocation);
 
-			Professor professor = professorRepository.findById(allocationNew.getProfessorId()).orElse(null);
-			Course course = courseRepository.findById(allocationNew.getCourseId()).orElse(null);
+			Professor professor = professorService.findById(allocation.getProfessorId());
+			allocation.setProfessor(professor);
 
-			allocationNew.setProfessor(professor);
-			allocationNew.setCourse(course);
+			Course course = courseService.findById(allocation.getCourseId());
+			allocation.setCourse(course);
 
-			return allocationNew;
+			return allocation;
 		}
-
 	}
 
 	// CRUD: Delete By Id
@@ -90,6 +97,12 @@ public class AllocationService {
 	}
 
 	// Regra de Negócio
+
+	boolean isEndHourGreaterThanStartHour(Allocation allocation) {
+		return allocation != null && allocation.getStart() != null && allocation.getEnd() != null
+				&& allocation.getEnd().compareTo(allocation.getStart()) > 0;
+	}
+
 	boolean hasCollision(Allocation newAllocation) {
 		boolean hasCollision = false;
 
@@ -111,5 +124,4 @@ public class AllocationService {
 				&& currentAllocation.getStart().compareTo(newAllocation.getEnd()) < 0
 				&& newAllocation.getStart().compareTo(currentAllocation.getEnd()) < 0;
 	}
-
 }

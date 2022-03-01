@@ -101,5 +101,4 @@ public class Allocation {
 				+ professorId + ", courseId=" + courseId + ", professor=" + professor + ", course=" + course + "]";
 	}
 
-	
 }
