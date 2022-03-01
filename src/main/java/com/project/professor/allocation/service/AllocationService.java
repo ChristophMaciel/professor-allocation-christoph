@@ -9,8 +9,6 @@ import com.project.professor.allocation.entity.Allocation;
 import com.project.professor.allocation.entity.Course;
 import com.project.professor.allocation.entity.Professor;
 import com.project.professor.allocation.repository.AllocationRepository;
-import com.project.professor.allocation.repository.CourseRepository;
-import com.project.professor.allocation.repository.ProfessorRepository;
 
 @Service
 public class AllocationService {
@@ -124,4 +122,5 @@ public class AllocationService {
 				&& currentAllocation.getStart().compareTo(newAllocation.getEnd()) < 0
 				&& newAllocation.getStart().compareTo(currentAllocation.getEnd()) < 0;
 	}
+
 }
