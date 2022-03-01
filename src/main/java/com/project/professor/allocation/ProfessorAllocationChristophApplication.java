@@ -11,6 +11,3 @@ public class ProfessorAllocationChristophApplication {
 	}
 
 }
-
-//adicionando comentario
-
