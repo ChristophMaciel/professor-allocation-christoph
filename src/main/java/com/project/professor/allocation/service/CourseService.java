@@ -41,22 +41,18 @@ public class CourseService {
 	public Course update(Course course) {
 		Long id = course.getId();
 		if (id != null && courseRepository.existsById(id)) {
-			return saveInternal(course);
+			course = courseRepository.save(course);
 		} else {
 			return null;
 		}
-	}
-
-	private Course saveInternal(Course course) {
-		course = courseRepository.save(course);
 		return course;
+
 	}
 
 	// CRUD: Delete By Id
 	public void deleteById(Long id) {
 		if (courseRepository.existsById(id)) {
 			courseRepository.deleteById(id);
-
 		}
 
 	}
