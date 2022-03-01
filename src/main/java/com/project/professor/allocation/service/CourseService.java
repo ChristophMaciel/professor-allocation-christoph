@@ -5,34 +5,36 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.project.professor.allocation.entity.Allocation;
 import com.project.professor.allocation.entity.Course;
+import com.project.professor.allocation.entity.Professor;
+import com.project.professor.allocation.repository.AllocationRepository;
 
 @Service
 public class CourseService {
 
-	private CourseService courseService;
+	private final CourseService courseService;
 
 	public CourseService(CourseService courseService) {
 		super();
 		this.courseService = courseService;
-
 	}
 
 	// CRUD: Read All
 	public List<Course> findAll() {
-		List<Course> course = courseService.findAll();
+		List<Course> course = courseRepository.findAll();
 		return course;
 	}
 
 	// CRUD: Read by ID
 	public Course findById(Long id) {
-		Optional<Course> optional = Optional.ofNullable(courseService.findById(id));
+		Optional<Course> optional = courseRepository.findById(id);
 		Course course = optional.orElse(null);
 		return course;
 	}
 
-	public List<Course> findByCourse(Long professorId) {
-		return courseService.findByCourse(professorId);
+	public List<Course> findByCourse(Long courseId) {
+		return courseRepository.findByCourseId(courseId);
 	}
 
 	// CRUD: Create
@@ -41,30 +43,33 @@ public class CourseService {
 		return saveInternal(course);
 	}
 
-	private Course saveInternal(Course course) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	// CRUD: Update
 	public Course update(Course course) {
 		Long id = course.getId();
-		if (id != null && courseService.existsById(id)) {
+		if (id != null && courseRepository.existsById(id)) {
 			return saveInternal(course);
 		} else {
 			return null;
 		}
 	}
 
-	private boolean existsById(Long id) {
-		// TODO Auto-generated method stub
-		return false;
+	private Course saveInternal(Course course) {
+		if (!isEndHourGreaterThanStartHour(course) || hasCollision(course)) {
+			throw new RuntimeException();
+		} else {
+			course = courseRepository.save(course);
+
+			Course course = courseService.findById(course.getCourseId());
+			course.setCourse(course);
+
+			return course;
+		}
 	}
 
 	// CRUD: Delete By Id
 	public void deleteById(Long id) {
-		if (courseService.existsById(id)) {
-			courseService.deleteById(id);
+		if (courseRepository.existsById(id)) {
+			courseRepository.deleteById(id);
 
 		}
 
@@ -73,7 +78,8 @@ public class CourseService {
 	// CRUD: Delete All
 	public void deleteAll() {
 
-		courseService.deleteAll();
+		courseRepository.deleteAllInBatch();
 
 	}
+
 }
