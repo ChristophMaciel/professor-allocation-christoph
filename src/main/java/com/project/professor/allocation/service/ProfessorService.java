@@ -1,71 +1,53 @@
 package com.project.professor.allocation.service;
 
 import java.util.List;
-import java.util.Optional;
-
 import org.springframework.stereotype.Service;
-
 import com.project.professor.allocation.entity.Professor;
+import com.project.professor.allocation.repository.ProfessorRepository;
 
 @Service
 public class ProfessorService {
 
-	private ProfessorService professorService;
+	private ProfessorRepository professorRepository;
 
-	public ProfessorService(ProfessorService professorService) {
+	public ProfessorService(ProfessorRepository professorRepository) {
 		super();
-		this.professorService = professorService;
-
+		this.professorRepository = professorRepository;
 	}
 
 	// CRUD: Read All
 	public List<Professor> findAll() {
-		List<Professor> professor = professorService.findAll();
+		List<Professor> professor = professorRepository.findAll();
 		return professor;
 	}
 
 	// CRUD: Read by ID
 	public Professor findById(Long id) {
-		Optional<Professor> optional = Optional.ofNullable(professorService.findById(id));
-		Professor professor = optional.orElse(null);
-		return professor;
-	}
-
-	public List<Professor> findByProfessor(Long professorId) {
-		return professorService.findByProfessor(professorId);
+		return professorRepository.findById(id).orElse(null);
 	}
 
 	// CRUD: Create
 	public Professor create(Professor professor) {
 		professor.setId(null);
-		return saveInternal(professor);
-	}
-
-	private Professor saveInternal(Professor professor) {
-		// TODO Auto-generated method stub
-		return null;
+		professor = professorRepository.save(professor);
+		return professor;
 	}
 
 	// CRUD: Update
 	public Professor update(Professor professor) {
 		Long id = professor.getId();
-		if (id != null && professorService.existsById(id)) {
-			return saveInternal(professor);
+		if (id != null && professorRepository.existsById(id)) {
+			professor = professorRepository.save(professor);
 		} else {
 			return null;
 		}
-	}
-
-	private boolean existsById(Long id) {
-		// TODO Auto-generated method stub
-		return false;
+		return professor;
 	}
 
 	// CRUD: Delete By Id
 	public void deleteById(Long id) {
-		if (professorService.existsById(id)) {
-			professorService.deleteById(id);
-
+		if (professorRepository.existsById(id)) {
+			professorRepository.deleteById(id);
 		}
 
 	}
@@ -73,7 +55,6 @@ public class ProfessorService {
 	// CRUD: Delete All
 	public void deleteAll() {
 
-		professorService.deleteAll();
-
+		professorRepository.deleteAll();
 	}
 }
