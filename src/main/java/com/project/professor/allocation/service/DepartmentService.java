@@ -1,77 +1,60 @@
 package com.project.professor.allocation.service;
 
 import java.util.List;
-import java.util.Optional;
 import org.springframework.stereotype.Service;
 import com.project.professor.allocation.entity.Department;
+import com.project.professor.allocation.repository.DepartmentRepository;
 
 @Service
 public class DepartmentService {
 
-	private DepartmentService departmentService;
-	private Long departmentId;
-	public DepartmentService(DepartmentService departmentService) {
-		super();
-		this.departmentService = departmentService;
+	private DepartmentRepository departmentRepository;
 
+	public DepartmentService(DepartmentRepository departmentRepository) {
+		super();
+		this.departmentRepository = departmentRepository;
 	}
 
 	// CRUD: Read All
 	public List<Department> findAll() {
-		List<Department> department = departmentService.findAll();
+		List<Department> department = departmentRepository.findAll();
 		return department;
 	}
 
 	// CRUD: Read by ID
 	public Department findById(Long id) {
-		Optional<Department> optional = Optional.ofNullable(departmentService.findById(id));
-		Department department = optional.orElse(null);
-		return department;
-	}
+		return departmentRepository.findById(id).orElse(null);
 
-	public List<Department> findByDepartment(Long department) {
-		return departmentService.findByDepartment(departmentId);
 	}
 
 	// CRUD: Create
 	public Department create(Department department) {
 		department.setId(null);
-		return saveInternal(department);
-	}
-
-	private Department saveInternal(Department department) {
-		// TODO Auto-generated method stub
-		return null;
+		department = departmentRepository.save(department);
+		return department;
 	}
 
 	// CRUD: Update
 	public Department update(Department department) {
 		Long id = department.getId();
-		if (id != null && departmentService.existsById(id)) {
-			return saveInternal(department);
+		if (id != null && departmentRepository.existsById(id)) {
+			department = departmentRepository.save(department);
 		} else {
 			return null;
 		}
-	}
-
-	private boolean existsById(Long id) {
-		// TODO Auto-generated method stub
-		return false;
+		return department;
 	}
 
 	// CRUD: Delete By Id
 	public void deleteById(Long id) {
-		if (departmentService.existsById(id)) {
-			departmentService.deleteById(id);
-
+		if (departmentRepository.existsById(id)) {
+			departmentRepository.deleteById(id);
 		}
-
 	}
 
 	// CRUD: Delete All
 	public void deleteAll() {
 
-		departmentService.deleteAll();
-
+		departmentRepository.deleteAll();
 	}
 }
