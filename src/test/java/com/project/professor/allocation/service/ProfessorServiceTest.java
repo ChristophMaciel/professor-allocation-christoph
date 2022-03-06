@@ -44,7 +44,7 @@ public class ProfessorServiceTest {
 	public void save() throws ParseException {
 		// Arrange
 		Professor professor = new Professor();
-		professor.setCpf("98765432111");
+		professor.setCpf("98765432117");
 		professor.setDepartmentId(1L);
 		professor.setName("Cleto França");
 
