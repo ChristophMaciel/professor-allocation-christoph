@@ -24,14 +24,18 @@ public class AllocationController {
 	}
 
 	@ResponseStatus(HttpStatus.OK)
-	@GetMapping(path = "/departments", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(path = "/allocations", produces = MediaType.APPLICATION_JSON_VALUE)
+
 	public ResponseEntity<List<Allocation>> findAll() {
 
 		List<Allocation> allocations = allocationService.findAll();
 		return new ResponseEntity<>(allocations, HttpStatus.OK);
 	}
 
-	public ResponseEntity<Allocation> findById(@PathVariable(name = "allocation_id") Long id) {
+	@ResponseStatus(HttpStatus.OK)
+	@GetMapping(path = "/allocations/{allocation_id}", produces = MediaType.APPLICATION_JSON_VALUE)
+
+	public ResponseEntity<Allocation> faindById(@PathVariable(name = "allocation_id") Long id) {
 
 		Allocation allocation = allocationService.findById(id);
 
