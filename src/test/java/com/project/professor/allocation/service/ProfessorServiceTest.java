@@ -22,7 +22,7 @@ public class ProfessorServiceTest {
 	@Test
 	public void findAll() {
 		// Act
-		List<Professor> professor = professorService.findAll();
+		List<Professor> professor = professorService.findAll(null);
 
 		// Print
 		professor.forEach(System.out::println);
@@ -49,7 +49,7 @@ public class ProfessorServiceTest {
 		professor.setName("Cleto França");
 
 		// Act
-		professor = professorService.create(professor);
+		professor = professorService.save(professor);
 
 		// Print
 		System.out.println(professor);
