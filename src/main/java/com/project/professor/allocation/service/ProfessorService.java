@@ -64,7 +64,7 @@ public class ProfessorService {
 		professor = professorRepository.save(professor);
 
 		Department department = departmentService.findById(professor.getDepartmentId());
-		professor.setDepartment(department);
+		professor.setDepart(department);
 
 		return professor;
 	}
