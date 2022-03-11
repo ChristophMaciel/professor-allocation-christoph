@@ -25,13 +25,13 @@ public class AllocationService {
 		this.courseService = courseService;
 	}
 
-	// CRUD: Read All
+	// CRUD: READ all
 	public List<Allocation> findAll() {
 		List<Allocation> allocations = allocationRepository.findAll();
 		return allocations;
 	}
 
-	// CRUD: Read by ID
+	// CRUD: READ by ID
 	public Allocation findById(Long id) {
 		Optional<Allocation> optional = allocationRepository.findById(id);
 		Allocation allocation = optional.orElse(null);
@@ -46,13 +46,13 @@ public class AllocationService {
 		return allocationRepository.findByCourseId(courseId);
 	}
 
-	// CRUD: Create
-	public Allocation create(Allocation allocation) {
+	// CRUD: CREATE
+	public Allocation save(Allocation allocation) {
 		allocation.setId(null);
 		return saveInternal(allocation);
 	}
 
-	// CRUD: Update
+	// CRUD: UPDATE
 	public Allocation update(Allocation allocation) {
 		Long id = allocation.getId();
 		if (id != null && allocationRepository.existsById(id)) {
@@ -63,44 +63,34 @@ public class AllocationService {
 	}
 
 	private Allocation saveInternal(Allocation allocation) {
-		if (!isEndHourGreaterThanStartHour(allocation) || hasCollision(allocation)) {
-			throw new RuntimeException();
+		if (hasCollision(allocation)) {
+			throw new RuntimeException("hasCollision");
 		} else {
-			allocation = allocationRepository.save(allocation);
+			Allocation allocationNew = allocationRepository.save(allocation);
 
-			Professor professor = professorService.findById(allocation.getProfessorId());
-			allocation.setProfessor(professor);
+			Professor professor = professorService.findById(allocationNew.getProfessorId());
+			Course course = courseService.findById(allocationNew.getCourseId());
 
-			Course course = courseService.findById(allocation.getCourseId());
-			allocation.setCourse(course);
+			allocationNew.setProfessor(professor);
+			allocationNew.setCourse(course);
 
-			return allocation;
+			return allocationNew;
 		}
 	}
 
-	// CRUD: Delete By Id
+	// CRUD: DELETE by ID
 	public void deleteById(Long id) {
 		if (allocationRepository.existsById(id)) {
 			allocationRepository.deleteById(id);
-
 		}
-
 	}
 
-	// CRUD: Delete All
+	// CRUD: DELETE all
 	public void deleteAll() {
-
 		allocationRepository.deleteAllInBatch();
-
 	}
 
 	// Regra de Negócio
-
-	boolean isEndHourGreaterThanStartHour(Allocation allocation) {
-		return allocation != null && allocation.getStart() != null && allocation.getEnd() != null
-				&& allocation.getEnd().compareTo(allocation.getStart()) > 0;
-	}
-
 	boolean hasCollision(Allocation newAllocation) {
 		boolean hasCollision = false;
 
@@ -122,5 +112,4 @@ public class AllocationService {
 				&& currentAllocation.getStart().compareTo(newAllocation.getEnd()) < 0
 				&& newAllocation.getStart().compareTo(currentAllocation.getEnd()) < 0;
 	}
-
 }
