@@ -1,8 +1,9 @@
 package com.project.professor.allocation.service;
 
 import java.util.List;
-import java.util.Optional;
+
 import org.springframework.stereotype.Service;
+
 import com.project.professor.allocation.entity.Course;
 import com.project.professor.allocation.repository.CourseRepository;
 
@@ -16,52 +17,39 @@ public class CourseService {
 		this.courseRepository = courseRepository;
 	}
 
-	// CRUD: Read All
-	public List<Course> findAll() {
-		List<Course> course = courseRepository.findAll();
-		return course;
+	public List<Course> findAll(String name) {
+		if (name == null) {
+			return courseRepository.findAll();
+		} else {
+			return courseRepository.findByNameContainingIgnoreCase(name);
+		}
 	}
 
-	// CRUD: Read by ID
 	public Course findById(Long id) {
-		Optional<Course> optional = courseRepository.findById(id);
-		Course course = optional.orElse(null);
-		return course;
+		return courseRepository.findById(id).orElse(null);
 	}
 
-	// CRUD: Create
-	public Course create(Course course) {
+	public Course save(Course course) {
 		course.setId(null);
-		course = courseRepository.save(course);
-		return course;
-
+		return courseRepository.save(course);
 	}
 
-	// CRUD: Update
 	public Course update(Course course) {
 		Long id = course.getId();
 		if (id != null && courseRepository.existsById(id)) {
-			course = courseRepository.save(course);
+			return courseRepository.save(course);
 		} else {
 			return null;
 		}
-		return course;
-
 	}
 
-	// CRUD: Delete By Id
 	public void deleteById(Long id) {
-		if (courseRepository.existsById(id)) {
+		if (id != null && courseRepository.existsById(id)) {
 			courseRepository.deleteById(id);
 		}
-
 	}
 
-	// CRUD: Delete All
 	public void deleteAll() {
-
 		courseRepository.deleteAllInBatch();
-
 	}
-
 }
