@@ -38,6 +38,9 @@ public class Allocation {
 	@Column(nullable = false)
 	private Date start;
 
+	@JsonFormat(pattern = "HH:mmZ")
+	@JsonSerialize(using = DateSerializer.class)
+	@JsonDeserialize(using = DateDeserializers.DateDeserializer.class)
 	@Temporal(TemporalType.TIME)
 	@Column(nullable = false)
 	private Date end;
