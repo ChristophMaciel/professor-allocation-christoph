@@ -67,10 +67,4 @@ public class Professor {
 	public void setDepart(Department depart) {
 		this.depart = depart;
 	}
-
-	public void setDepartment(Department department) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }
