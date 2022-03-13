@@ -30,8 +30,8 @@ public class Allocation {
 	private Long id;
 
 	@Enumerated(EnumType.STRING)
-	@Column(nullable = false)
-	private DayOfWeek day;
+	@Column(name = "day", nullable = false)
+	private DayOfWeek dayOfWeek;
 
 	@ApiModelProperty(example = "10:00-0300")
 	@JsonFormat(pattern = "HH:mmZ")
@@ -72,11 +72,11 @@ public class Allocation {
 	}
 
 	public DayOfWeek getDay() {
-		return day;
+		return dayOfWeek;
 	}
 
 	public void setDay(DayOfWeek day) {
-		this.day = day;
+		this.dayOfWeek = day;
 	}
 
 	public Date getStart() {
@@ -129,8 +129,9 @@ public class Allocation {
 
 	@Override
 	public String toString() {
-		return "Allocation [id=" + id + ", day=" + day + ", start=" + startHour + ", end=" + endHour + ", professorId="
-				+ professorId + ", courseId=" + courseId + ", professor=" + professor + ", course=" + course + "]";
+		return "Allocation [id=" + id + ", day=" + dayOfWeek + ", start=" + startHour + ", end=" + endHour
+				+ ", professorId=" + professorId + ", courseId=" + courseId + ", professor=" + professor + ", course="
+				+ course + "]";
 	}
 
 }
