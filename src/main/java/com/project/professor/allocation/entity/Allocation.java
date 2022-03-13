@@ -20,6 +20,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.deser.std.DateDeserializers;
 import com.fasterxml.jackson.databind.ser.std.DateSerializer;
 
+import io.swagger.annotations.ApiModelProperty;
+
 @Entity
 public class Allocation {
 
@@ -31,16 +33,21 @@ public class Allocation {
 	@Column(nullable = false)
 	private DayOfWeek day;
 
+	@ApiModelProperty(example = "10:00-0300")
 	@JsonFormat(pattern = "HH:mmZ")
 	@JsonSerialize(using = DateSerializer.class)
 	@JsonDeserialize(using = DateDeserializers.DateDeserializer.class)
 	@Temporal(TemporalType.TIME)
-	@Column(nullable = false)
-	private Date start;
+	@Column(name = "start", nullable = false)
+	private Date startHour;
 
+	@ApiModelProperty(example = "12:00-0300")
+	@JsonFormat(pattern = "HH:mmZ")
+	@JsonSerialize(using = DateSerializer.class)
+	@JsonDeserialize(using = DateDeserializers.DateDeserializer.class)
 	@Temporal(TemporalType.TIME)
-	@Column(nullable = false)
-	private Date end;
+	@Column(name = "end", nullable = false)
+	private Date endHour;
 
 	@Column(name = "professor_id", nullable = false)
 	private Long professorId;
@@ -73,19 +80,19 @@ public class Allocation {
 	}
 
 	public Date getStart() {
-		return start;
+		return startHour;
 	}
 
 	public void setStart(Date start) {
-		this.start = start;
+		this.startHour = start;
 	}
 
 	public Date getEnd() {
-		return end;
+		return endHour;
 	}
 
 	public void setEnd(Date end) {
-		this.end = end;
+		this.endHour = end;
 	}
 
 	public Long getCourseId() {
@@ -122,7 +129,7 @@ public class Allocation {
 
 	@Override
 	public String toString() {
-		return "Allocation [id=" + id + ", day=" + day + ", start=" + start + ", end=" + end + ", professorId="
+		return "Allocation [id=" + id + ", day=" + day + ", start=" + startHour + ", end=" + endHour + ", professorId="
 				+ professorId + ", courseId=" + courseId + ", professor=" + professor + ", course=" + course + "]";
 	}
 
